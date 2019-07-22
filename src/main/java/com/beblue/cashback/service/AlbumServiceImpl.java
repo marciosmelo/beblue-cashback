@@ -12,6 +12,8 @@ import com.wrapper.spotify.model_objects.specification.AlbumSimplified;
 import com.wrapper.spotify.model_objects.specification.Paging;
 import com.wrapper.spotify.requests.data.albums.GetAlbumRequest;
 import com.wrapper.spotify.requests.data.search.simplified.SearchAlbumsRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -21,6 +23,8 @@ import java.util.stream.Stream;
 
 @Service
 public class AlbumServiceImpl implements AlbumService {
+
+    Logger logger = LoggerFactory.getLogger(AlbumServiceImpl.class);
 
     private static final CountryCode BRASIL = CountryCode.BR;
     private static final Integer QUANTIDADE_ALBUNS_MAXIMO = 50;
@@ -55,7 +59,8 @@ public class AlbumServiceImpl implements AlbumService {
                     .sorted(Comparator.comparing(AlbumSimplified::getName));
 
         } catch (IOException | SpotifyWebApiException e) {
-            throw new ApiException("Error: " + e.getMessage());
+            logger.error("Erro ao obter álbums por Gênero -> {}", e.getMessage());
+            throw new ApiException("Erro ao obter álbums por Gênero: " + e.getMessage());
         }
     }
 
@@ -70,6 +75,7 @@ public class AlbumServiceImpl implements AlbumService {
 
             return albumRequest.execute();
         } catch (IOException | SpotifyWebApiException e) {
+            logger.error("Erro ao obter Álbum por id {}. Erro -> {} ", id, e.getMessage());
             throw new ApiException("Não existe nenhum album com identificador: " + id);
         }
 
@@ -89,6 +95,7 @@ public class AlbumServiceImpl implements AlbumService {
 
 
         } catch (NumberFormatException ne) {
+            logger.error("Erro ao obter offset (início da paginação) -> {} ", ne.getMessage());
             throw new ApiException("Número da página é inválido, favor informar um valor inteiro");
         }
         return inicioContagem;
@@ -98,6 +105,7 @@ public class AlbumServiceImpl implements AlbumService {
         try {
             return GeneroEnum.valueOf(descricaGenero.toUpperCase());
         } catch (IllegalArgumentException ile) {
+            logger.error("Erro ao obter enum do Genero pela descrição informada -> {} ", ile.getMessage());
             throw new ApiException("Erro: Os Gêneros Musicais suportados são: Rock, MPB, Classic ou Pop.");
         }
     }

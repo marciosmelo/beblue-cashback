@@ -4,6 +4,8 @@ import com.beblue.cashback.exception.ApiException;
 import com.beblue.cashback.service.AlbumService;
 import com.wrapper.spotify.model_objects.specification.Album;
 import com.wrapper.spotify.model_objects.specification.AlbumSimplified;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +17,8 @@ import java.util.stream.Stream;
 
 @RestController
 public class AlbumController {
+
+    Logger logger = LoggerFactory.getLogger(AlbumController.class);
 
     private static final String NUMERO_PADRAO_PAGINA = "1";
 
@@ -30,12 +34,15 @@ public class AlbumController {
             throw new ApiException("Não é possível pesquisar Albuns sem informar um gênero");
         }
 
-        return service.obterAlbunsPorGenero(genero.get(), numeroPagina);
+        String descricaoGenero = genero.get();
+        logger.info("Pesquisando Albums do gênero {} na paginação de número {} ", descricaoGenero, numeroPagina);
+        return service.obterAlbunsPorGenero(descricaoGenero, numeroPagina);
     }
 
     @RequestMapping("/albuns/{id}")
     public Album obterAlbumPorId(@PathVariable String id) throws ApiException {
-        
+
+        logger.info("Buscando Álbum de id {} ", id);
         return service.obterAlbumPorId(id);
 
     }
