@@ -88,6 +88,6 @@ public class AlbumServiceImplTest {
     }
 
     private Disco getDiscoMock(String idAlbum) {
-        return new Disco(idAlbum, "ABBA", null);
+        return new Disco(idAlbum, "ABBA");
     }
 }

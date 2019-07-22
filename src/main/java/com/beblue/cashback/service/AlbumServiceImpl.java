@@ -1,6 +1,7 @@
 package com.beblue.cashback.service;
 
 import com.beblue.cashback.common.Messages;
+import com.beblue.cashback.common.ValorUtil;
 import com.beblue.cashback.credentials.SpotifyApiCredentials;
 import com.beblue.cashback.exception.ApiException;
 import com.beblue.cashback.model.Disco;
@@ -25,6 +26,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class AlbumServiceImpl implements AlbumService {
@@ -57,30 +59,17 @@ public class AlbumServiceImpl implements AlbumService {
             final Paging<AlbumSimplified> albumSimplifiedPaging =
                     getAlbumSimplifiedPaging(quantidadeAlbuns, inicioContagem, genero);
 
-            return Arrays.stream(albumSimplifiedPaging.getItems())
-                    .filter(a -> a.getType().equals(ModelObjectType.ALBUM))
-                    .sorted(Comparator.comparing(AlbumSimplified::getName))
-                    .map(new Function<AlbumSimplified, Disco>() {
-                        @Override
-                        public Disco apply(AlbumSimplified a) {
-                            return new Disco(a.getId(), a.getName(), null);
-                        }
-                    }).collect(Collectors.toList());
+            Stream<AlbumSimplified> albuns = getAlbunsOrdenados(albumSimplifiedPaging);
+
+
+            return albuns.map(a ->
+                    new Disco(a.getId(), a.getName(), a.getType().getType(), a.getExternalUrls(), ValorUtil.gerarValorRandomico(a.getArtists().length)))
+                    .collect(Collectors.toList());
 
         } catch (IOException | SpotifyWebApiException e) {
             logger.error("Erro ao obter álbums por Gênero -> {}", e.getMessage());
             throw new ApiException(messages.get("erro.album.genero"));
         }
-    }
-
-    private Paging<AlbumSimplified> getAlbumSimplifiedPaging(Integer quantidadeAlbuns, Integer inicioContagem, GeneroEnum genero) throws IOException, SpotifyWebApiException {
-        final SearchAlbumsRequest searchAlbumsRequest = spotityApi.searchAlbums(genero.getDescricao())
-                .market(BRASIL)
-                .offset(inicioContagem)
-                .limit(quantidadeAlbuns)
-                .build();
-
-        return searchAlbumsRequest.execute();
     }
 
     @Override
@@ -138,10 +127,26 @@ public class AlbumServiceImpl implements AlbumService {
         }
     }
 
-    Function<Album, Disco> externalToDisco = new Function<Album, Disco>() {
-        @Override
-        public Disco apply(Album album) {
-            return new Disco(album.getId(), album.getName(), album.getGenres());
-        }
-    };
+    private Stream<AlbumSimplified> getAlbunsOrdenados(Paging<AlbumSimplified> albumSimplifiedPaging) {
+        return Arrays.stream(albumSimplifiedPaging.getItems())
+                .filter(a -> a.getType().equals(ModelObjectType.ALBUM))
+                .sorted(Comparator.comparing(AlbumSimplified::getName));
+    }
+
+    private Paging<AlbumSimplified> getAlbumSimplifiedPaging(Integer quantidadeAlbuns, Integer inicioContagem, GeneroEnum genero) throws IOException, SpotifyWebApiException {
+        final SearchAlbumsRequest searchAlbumsRequest = spotityApi.searchAlbums(genero.getDescricao())
+                .market(BRASIL)
+                .offset(inicioContagem)
+                .limit(quantidadeAlbuns)
+                .build();
+
+        return searchAlbumsRequest.execute();
+    }
+
+    private Function<Album, Disco> externalToDisco =
+            album -> new Disco(album.getId(),
+                               album.getName(),
+                               album.getType().getType(),
+                               album.getExternalUrls(),
+                               ValorUtil.gerarValorRandomico(album.getPopularity()));
 }

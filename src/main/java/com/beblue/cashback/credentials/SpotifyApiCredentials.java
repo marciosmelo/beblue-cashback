@@ -1,6 +1,5 @@
 package com.beblue.cashback.credentials;
 
-import com.beblue.cashback.exception.ApiException;
 import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 import com.wrapper.spotify.model_objects.credentials.ClientCredentials;
@@ -14,12 +13,12 @@ public class SpotifyApiCredentials {
 
     private static final Logger logger =  LoggerFactory.getLogger(SpotifyApiCredentials.class);
 
-    private static final String clientId = "8df71ceda4e441cd859c87f9d99f75ff";
-    private static final String clientSecret = "acdb3f0f7e8540a88b44cbb09a2c3757";
+    private static final String CLIENT_ID = "8df71ceda4e441cd859c87f9d99f75ff";
+    private static final String CLIENT_SECRET = "acdb3f0f7e8540a88b44cbb09a2c3757";
 
     private static final SpotifyApi spotifyApi = new SpotifyApi.Builder()
-            .setClientId(clientId)
-            .setClientSecret(clientSecret)
+            .setClientId(CLIENT_ID)
+            .setClientSecret(CLIENT_SECRET)
             .build();
 
     private static final ClientCredentialsRequest clientCredentialsRequest = spotifyApi.clientCredentials()

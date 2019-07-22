@@ -4,8 +4,6 @@ import com.beblue.cashback.common.Messages;
 import com.beblue.cashback.exception.ApiException;
 import com.beblue.cashback.model.Disco;
 import com.beblue.cashback.service.AlbumService;
-import com.wrapper.spotify.model_objects.specification.Album;
-import com.wrapper.spotify.model_objects.specification.AlbumSimplified;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @RestController
 public class AlbumController {
@@ -32,7 +29,7 @@ public class AlbumController {
     Messages messages;
 
     @RequestMapping("/albuns")
-    public List<Disco> obterAlbunsPorGenero(@RequestParam Optional<String> genero, @RequestParam Optional<String> pagina) throws Exception {
+    public List<Disco> obterAlbunsPorGenero(@RequestParam Optional<String> genero, @RequestParam Optional<String> pagina) throws ApiException {
 
         String numeroPagina = pagina.isPresent() ? pagina.get() : NUMERO_PADRAO_PAGINA;
 

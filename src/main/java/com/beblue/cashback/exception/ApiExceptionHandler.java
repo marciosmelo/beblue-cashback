@@ -12,7 +12,6 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
