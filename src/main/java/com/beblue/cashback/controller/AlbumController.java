@@ -1,5 +1,6 @@
 package com.beblue.cashback.controller;
 
+import com.beblue.cashback.common.Messages;
 import com.beblue.cashback.exception.ApiException;
 import com.beblue.cashback.service.AlbumService;
 import com.wrapper.spotify.model_objects.specification.Album;
@@ -25,13 +26,16 @@ public class AlbumController {
     @Autowired
     private AlbumService service;
 
+    @Autowired
+    Messages messages;
+
     @RequestMapping("/albuns")
     public Stream<AlbumSimplified> obterAlbunsPorGenero(@RequestParam Optional<String> genero, @RequestParam Optional<String> pagina) throws Exception {
 
         String numeroPagina = pagina.isPresent() ? pagina.get() : NUMERO_PADRAO_PAGINA;
 
         if (!genero.isPresent()) {
-            throw new ApiException("Não é possível pesquisar Albuns sem informar um gênero");
+            throw new ApiException(messages.get("erro.genero.nao.informado"));
         }
 
         String descricaoGenero = genero.get();

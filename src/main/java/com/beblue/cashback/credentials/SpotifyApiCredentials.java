@@ -1,13 +1,18 @@
 package com.beblue.cashback.credentials;
 
+import com.beblue.cashback.exception.ApiException;
 import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 import com.wrapper.spotify.model_objects.credentials.ClientCredentials;
 import com.wrapper.spotify.requests.authorization.client_credentials.ClientCredentialsRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 public class SpotifyApiCredentials {
+
+    private static final Logger logger =  LoggerFactory.getLogger(SpotifyApiCredentials.class);
 
     private static final String clientId = "8df71ceda4e441cd859c87f9d99f75ff";
     private static final String clientSecret = "acdb3f0f7e8540a88b44cbb09a2c3757";
@@ -20,6 +25,7 @@ public class SpotifyApiCredentials {
     private static final ClientCredentialsRequest clientCredentialsRequest = spotifyApi.clientCredentials()
             .build();
 
+
     public static SpotifyApi getSpotifyApi() {
         try {
             final ClientCredentials clientCredentials = clientCredentialsRequest.execute();
@@ -29,7 +35,7 @@ public class SpotifyApiCredentials {
 
 
         } catch (IOException | SpotifyWebApiException e) {
-            System.out.println("Error: " + e.getMessage());
+            logger.error("Erro ao conectar à Api Spotfy -> {}", e.getMessage());
         }
 
         return spotifyApi;

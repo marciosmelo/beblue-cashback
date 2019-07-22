@@ -1,5 +1,6 @@
 package com.beblue.cashback.service;
 
+import com.beblue.cashback.common.Messages;
 import com.beblue.cashback.credentials.SpotifyApiCredentials;
 import com.beblue.cashback.exception.ApiException;
 import com.beblue.cashback.model.enums.GeneroEnum;
@@ -14,6 +15,7 @@ import com.wrapper.spotify.requests.data.albums.GetAlbumRequest;
 import com.wrapper.spotify.requests.data.search.simplified.SearchAlbumsRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -31,6 +33,9 @@ public class AlbumServiceImpl implements AlbumService {
     private static final Integer QUANTIDADE_ALBUNS_POR_PAGINA = 10;
 
     private static final SpotifyApi spotityApi = SpotifyApiCredentials.getSpotifyApi();
+
+    @Autowired
+    Messages messages;
 
     @Override
     public Stream<AlbumSimplified> obterAlbunsPorGenero(String descricaGenero, String pagina) throws ApiException {
@@ -60,7 +65,7 @@ public class AlbumServiceImpl implements AlbumService {
 
         } catch (IOException | SpotifyWebApiException e) {
             logger.error("Erro ao obter álbums por Gênero -> {}", e.getMessage());
-            throw new ApiException("Erro ao obter álbums por Gênero: " + e.getMessage());
+            throw new ApiException(messages.get("erro.album.genero"));
         }
     }
 
@@ -76,7 +81,7 @@ public class AlbumServiceImpl implements AlbumService {
             return albumRequest.execute();
         } catch (IOException | SpotifyWebApiException e) {
             logger.error("Erro ao obter Álbum por id {}. Erro -> {} ", id, e.getMessage());
-            throw new ApiException("Não existe nenhum album com identificador: " + id);
+            throw new ApiException(messages.get("erro.album.id.invalido"));
         }
 
     }
@@ -88,7 +93,7 @@ public class AlbumServiceImpl implements AlbumService {
             numPagina = Integer.valueOf(pagina);
 
             if (numPagina < 1 || numPagina > 5) {
-                throw new ApiException("Número de Página inválido (Min 1, Max 5).");
+                throw new ApiException(messages.get("erro.numero.pagina.invalido"));
             }
 
             inicioContagem = (numPagina - 1) * QUANTIDADE_ALBUNS_POR_PAGINA;
@@ -96,7 +101,7 @@ public class AlbumServiceImpl implements AlbumService {
 
         } catch (NumberFormatException ne) {
             logger.error("Erro ao obter offset (início da paginação) -> {} ", ne.getMessage());
-            throw new ApiException("Número da página é inválido, favor informar um valor inteiro");
+            throw new ApiException(messages.get("erro.paginacao.invalida"));
         }
         return inicioContagem;
     }
@@ -106,7 +111,7 @@ public class AlbumServiceImpl implements AlbumService {
             return GeneroEnum.valueOf(descricaGenero.toUpperCase());
         } catch (IllegalArgumentException ile) {
             logger.error("Erro ao obter enum do Genero pela descrição informada -> {} ", ile.getMessage());
-            throw new ApiException("Erro: Os Gêneros Musicais suportados são: Rock, MPB, Classic ou Pop.");
+            throw new ApiException(messages.get("erro.album.genero.invalido"));
         }
     }
 }
