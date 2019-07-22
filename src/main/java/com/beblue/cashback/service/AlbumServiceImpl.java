@@ -3,6 +3,7 @@ package com.beblue.cashback.service;
 import com.beblue.cashback.common.Messages;
 import com.beblue.cashback.credentials.SpotifyApiCredentials;
 import com.beblue.cashback.exception.ApiException;
+import com.beblue.cashback.model.Disco;
 import com.beblue.cashback.model.enums.GeneroEnum;
 import com.neovisionaries.i18n.CountryCode;
 import com.wrapper.spotify.SpotifyApi;
@@ -21,7 +22,9 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.stream.Stream;
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class AlbumServiceImpl implements AlbumService {
@@ -38,7 +41,7 @@ public class AlbumServiceImpl implements AlbumService {
     Messages messages;
 
     @Override
-    public Stream<AlbumSimplified> obterAlbunsPorGenero(String descricaGenero, String pagina) throws ApiException {
+    public List<Disco> obterAlbunsPorGenero(String descricaGenero, String pagina) throws ApiException {
         Integer quantidadeAlbuns = QUANTIDADE_ALBUNS_MAXIMO;
         Integer inicioContagem = 0;
 
@@ -51,17 +54,18 @@ public class AlbumServiceImpl implements AlbumService {
                 inicioContagem = obterInicioDaPaginacao(pagina);
             }
 
-            final SearchAlbumsRequest searchAlbumsRequest = spotityApi.searchAlbums(genero.getDescricao())
-                    .market(BRASIL)
-                    .offset(inicioContagem)
-                    .limit(quantidadeAlbuns)
-                    .build();
-
-            final Paging<AlbumSimplified> albumSimplifiedPaging = searchAlbumsRequest.execute();
+            final Paging<AlbumSimplified> albumSimplifiedPaging =
+                    getAlbumSimplifiedPaging(quantidadeAlbuns, inicioContagem, genero);
 
             return Arrays.stream(albumSimplifiedPaging.getItems())
                     .filter(a -> a.getType().equals(ModelObjectType.ALBUM))
-                    .sorted(Comparator.comparing(AlbumSimplified::getName));
+                    .sorted(Comparator.comparing(AlbumSimplified::getName))
+                    .map(new Function<AlbumSimplified, Disco>() {
+                        @Override
+                        public Disco apply(AlbumSimplified a) {
+                            return new Disco(a.getId(), a.getName(), null);
+                        }
+                    }).collect(Collectors.toList());
 
         } catch (IOException | SpotifyWebApiException e) {
             logger.error("Erro ao obter álbums por Gênero -> {}", e.getMessage());
@@ -69,21 +73,40 @@ public class AlbumServiceImpl implements AlbumService {
         }
     }
 
+    private Paging<AlbumSimplified> getAlbumSimplifiedPaging(Integer quantidadeAlbuns, Integer inicioContagem, GeneroEnum genero) throws IOException, SpotifyWebApiException {
+        final SearchAlbumsRequest searchAlbumsRequest = spotityApi.searchAlbums(genero.getDescricao())
+                .market(BRASIL)
+                .offset(inicioContagem)
+                .limit(quantidadeAlbuns)
+                .build();
+
+        return searchAlbumsRequest.execute();
+    }
+
     @Override
-    public Album obterAlbumPorId(String id) throws ApiException {
+    public Disco obterAlbumPorId(String id) throws ApiException {
 
         try {
 
-            final GetAlbumRequest albumRequest = spotityApi
-                    .getAlbum(id)
-                    .market(BRASIL).build();
+            logger.info("Obtendo Objeto Album da SpotifyApi");
+            Album album = this.getAlbumSpotify(id);
 
-            return albumRequest.execute();
+            logger.info("Retornando model Disco transformado");
+            return externalToDisco.apply(album);
+
         } catch (IOException | SpotifyWebApiException e) {
             logger.error("Erro ao obter Álbum por id {}. Erro -> {} ", id, e.getMessage());
             throw new ApiException(messages.get("erro.album.id.invalido"));
         }
 
+    }
+
+    private Album getAlbumSpotify(String id) throws IOException, SpotifyWebApiException {
+        final GetAlbumRequest albumRequest = spotityApi
+                .getAlbum(id)
+                .market(BRASIL).build();
+
+        return albumRequest.execute();
     }
 
     private Integer obterInicioDaPaginacao(String pagina) throws ApiException {
@@ -114,4 +137,11 @@ public class AlbumServiceImpl implements AlbumService {
             throw new ApiException(messages.get("erro.album.genero.invalido"));
         }
     }
+
+    Function<Album, Disco> externalToDisco = new Function<Album, Disco>() {
+        @Override
+        public Disco apply(Album album) {
+            return new Disco(album.getId(), album.getName(), album.getGenres());
+        }
+    };
 }
