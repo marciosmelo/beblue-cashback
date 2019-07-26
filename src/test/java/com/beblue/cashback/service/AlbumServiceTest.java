@@ -15,10 +15,10 @@ import java.util.List;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-public class AlbumServiceImplTest {
+public class AlbumServiceTest {
 
     @Mock
-    AlbumServiceImpl albumServiceImpl;
+	AlbumService albumServiceImpl;
 
     @Before
     public void init() {

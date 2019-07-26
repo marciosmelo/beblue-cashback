@@ -2,8 +2,21 @@ package com.beblue.cashback.service;
 
 import com.beblue.cashback.model.Cashback;
 import com.beblue.cashback.model.enums.GeneroEnum;
+import com.beblue.cashback.repository.CashbackRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-public interface CashbackService {
+import java.util.Optional;
 
-    Cashback obterCashbackPorGeneroDia(GeneroEnum genero, int codigoDia);
+@Service
+public class CashbackService {
+
+    @Autowired
+    private CashbackRepository repository;
+
+    public Cashback obterCashbackPorGeneroDia(GeneroEnum genero, int codigoDia) {
+        Optional<Cashback> optionalCashback = repository.findById(Long.valueOf(codigoDia));
+
+        return optionalCashback.get();
+    }
 }

@@ -6,10 +6,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-public class CashbackServiceImplTest {
+public class CashbackServiceTest {
 
     @InjectMocks
-    private CashbackServiceImpl cashbackService;
+    private CashbackService cashbackService;
 
     @Mock
     private CashbackRepository repository;

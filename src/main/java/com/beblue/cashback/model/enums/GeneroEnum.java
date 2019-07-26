@@ -1,5 +1,10 @@
 package com.beblue.cashback.model.enums;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
 public enum GeneroEnum {
 
     POP(1,"POP"),
@@ -10,14 +15,4 @@ public enum GeneroEnum {
     private int codigo;
     private String descricao;
 
-
-    GeneroEnum(int codigo, String descricao) {
-        this.descricao = descricao;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public int getCodigo() { return  codigo; }
 }
