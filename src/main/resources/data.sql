@@ -6,7 +6,7 @@ CREATE TABLE cashback (
   id INT AUTO_INCREMENT  PRIMARY KEY,
   cd_genero INT NOT NULL,
   cd_dia int NOT NULL,
-  percentual DECIMAL NOT NULL
+  vl_percentual DECIMAL NOT NULL
 );
 
 CREATE TABLE venda (
@@ -25,7 +25,7 @@ CREATE TABLE item_venda (
     cd_album VARCHAR2(250)
 );
 
-INSERT INTO cashback (cd_genero, cd_dia, percentual) VALUES
+INSERT INTO cashback (cd_genero, cd_dia, vl_percentual) VALUES
 (1, 1, 25),(1, 2, 7),(1, 3, 6),(1, 4, 2),(1, 5, 10),(1, 6, 15),(1, 7, 20),
 (2, 1, 30),(2, 2, 5), (2, 3, 10),(2, 4, 15),(2, 5, 20),(2, 6, 25),(2, 7, 30),
 (3, 1, 35),(3, 2, 3), (3, 3, 5), (3, 4, 8), (3, 5, 13),(3, 6, 18),(3, 7, 25),

@@ -11,6 +11,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(of = {"id"})
 @Entity(name = "cashback")
 public class Cashback {
