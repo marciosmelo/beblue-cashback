@@ -14,9 +14,4 @@ public class CashbackService {
     @Autowired
     private CashbackRepository repository;
 
-    public Cashback obterCashbackPorGeneroDia(GeneroEnum genero, int codigoDia) {
-        Optional<Cashback> optionalCashback = repository.findById(Long.valueOf(codigoDia));
-
-        return optionalCashback.get();
-    }
 }

@@ -18,7 +18,7 @@ import static org.mockito.Mockito.*;
 public class AlbumServiceTest {
 
     @Mock
-	AlbumService albumServiceImpl;
+	AlbumService albumService;
 
     @Before
     public void init() {
@@ -32,9 +32,9 @@ public class AlbumServiceTest {
 
         try {
 
-            when(albumServiceImpl.obterAlbumPorId(idAlbum)).thenReturn(discoABBA);
+            when(albumService.obterAlbumPorId(idAlbum)).thenReturn(discoABBA);
 
-            Disco disco = albumServiceImpl.obterAlbumPorId(idAlbum);
+            Disco disco = albumService.obterAlbumPorId(idAlbum);
 
             Assert.assertEquals(disco, discoABBA);
 
@@ -51,9 +51,9 @@ public class AlbumServiceTest {
 
         try {
 
-            when(albumServiceImpl.obterAlbumPorId(idNaoExistente)).thenReturn(null);
+            when(albumService.obterAlbumPorId(idNaoExistente)).thenReturn(null);
 
-            Disco disco = albumServiceImpl.obterAlbumPorId(idNaoExistente);
+            Disco disco = albumService.obterAlbumPorId(idNaoExistente);
 
         } catch (Exception e) {
             fail("Erro ao testar obter item por id " + e.getMessage());
@@ -66,7 +66,7 @@ public class AlbumServiceTest {
 
         try {
             List<Disco> discosClassicos =
-                    albumServiceImpl.obterAlbunsPorGenero(GeneroEnum.CLASSIC.getDescricao(), "6");
+                    albumService.obterAlbunsPorGenero(GeneroEnum.CLASSIC.getDescricao(), "6");
         } catch (Exception e) {
             fail("Falha ao realizar testes de pesquisa por generos");
         }
@@ -80,7 +80,7 @@ public class AlbumServiceTest {
         try {
 
             List<Disco> discosClassicos =
-                    albumServiceImpl.obterAlbunsPorGenero(generoInvalido, "5");
+                    albumService.obterAlbunsPorGenero(generoInvalido, "5");
         } catch (Exception e) {
             fail("Falha ao realizar testes de pesquisa por generos");
         }
