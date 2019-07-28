@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import static org.junit.Assert.fail;
@@ -25,6 +26,7 @@ public class VendaServiceTest {
 	public void deveObterAlbunPorId() {
 
 		try {
+			Mockito.when(service.obterPorId(1L)).thenReturn(new Venda());
 			Venda venda = service.obterPorId(1L);
 
 			Assert.assertNotNull(venda);

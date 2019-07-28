@@ -12,26 +12,28 @@ import java.math.BigDecimal;
 @Setter
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"id"})
-@Entity(name = "item_venda")
-public class ItemVenda {
+@Entity(name = "disco_venda")
+public class DiscoVenda {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", nullable = false)
 	private Long id;
-
-	@Column(name = "vl_cashback")
-	private BigDecimal valorCashback;
-
-	@Column(name = "cd_album")
-	private String codigoAlbum;
-
-	@Column(name="vl_unitario", nullable = false, precision = 10, scale  = 2)
-	private BigDecimal valorUnitario;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "id_venda", nullable = false)
 	private Venda venda;
 
-	@ManyToOne
-	@JoinColumn(name = "id_cashback", nullable = false)
-	private Cashback cashback;
+	@ManyToOne(optional = false, cascade = CascadeType.ALL)
+	@JoinColumn(name = "id_disco")
+	private Disco disco;
+
+	@Column(name = "vl_cashback")
+	private BigDecimal valorCashback;
+
+	@Column(name="vl_unitario", nullable = false, precision = 10, scale  = 2)
+	private BigDecimal valorUnitario;
+
+
+
 }

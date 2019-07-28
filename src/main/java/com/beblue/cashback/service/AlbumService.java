@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -60,9 +61,8 @@ public class AlbumService {
 
             Stream<AlbumSimplified> albuns = getAlbunsOrdenados(albumSimplifiedPaging);
 
-
             return albuns.map(a ->
-                    new Disco(a.getId(), a.getName(), a.getType().getType(), ValorUtil.gerarValorRandomico(a.getArtists().length)))
+                    new Disco(null, a.getId(), a.getName(), genero, ValorUtil.gerarValorRandomico(a.getArtists().length)))
                     .collect(Collectors.toList());
 
         } catch (IOException | SpotifyWebApiException e) {
@@ -142,8 +142,21 @@ public class AlbumService {
     }
 
     private Function<Album, Disco> externalToDisco =
-            album -> new Disco(album.getId(),
+            album -> new Disco(null,
+                               album.getId(),
                                album.getName(),
-                               album.getType().getType(),
+                               this.obterGenero(album.getGenres()),
                                ValorUtil.gerarValorRandomico(album.getPopularity()));
+
+    private GeneroEnum obterGenero(String[] genres) {
+
+        Optional ptGenero = Arrays.stream(genres).filter(g ->
+                        g.equalsIgnoreCase(GeneroEnum.CLASSIC.getDescricao()) ||
+                        g.equalsIgnoreCase(GeneroEnum.MPB.getDescricao()) ||
+                        g.equalsIgnoreCase(GeneroEnum.POP.getDescricao()) ||
+                        g.equalsIgnoreCase(GeneroEnum.ROCK.getDescricao()))
+                .findFirst();
+
+        return ptGenero.isPresent() ? GeneroEnum.valueOf((String) ptGenero.get()) : null;
+    }
 }

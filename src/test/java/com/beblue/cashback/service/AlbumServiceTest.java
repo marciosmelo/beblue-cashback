@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -88,6 +89,10 @@ public class AlbumServiceTest {
     }
 
     private Disco getDiscoMock(String idAlbum) {
-        return new Disco(idAlbum, "ABBA");
+        return new Disco(1L,
+                idAlbum,
+                "Combat Rock",
+                GeneroEnum.ROCK,
+                BigDecimal.TEN);
     }
 }

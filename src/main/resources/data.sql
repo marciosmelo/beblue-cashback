@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS cashback;
 DROP TABLE IF EXISTS venda;
-DROP TABLE IF EXISTS item_venda;
+DROP TABLE IF EXISTS disco_venda;
+DROP TABLE IF EXISTS disco;
 
 CREATE TABLE cashback (
   id INT AUTO_INCREMENT  PRIMARY KEY,
@@ -14,15 +15,22 @@ CREATE TABLE venda (
    dt_venda DATETIME
 );
 
-CREATE TABLE item_venda (
+CREATE TABLE disco (
+   id INT AUTO_INCREMENT  PRIMARY KEY,
+   id_spotify VARCHAR2(250),
+   tx_nome VARCHAR2(250),
+   cd_genero INT,
+   vl_preco DECIMAL(10,2)
+);
+
+CREATE TABLE disco_venda (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_venda INT,
-    id_cashback INT,
-    FOREIGN KEY (id_cashback) REFERENCES cashback(id),
     foreign key (id_venda) references venda(id),
+    id_disco INT,
+    foreign key (id_disco) references disco(id),
     vl_cashback DECIMAL not null,
-    vl_unitario DECIMAL not null,
-    cd_album VARCHAR2(250)
+    vl_unitario DECIMAL not null
 );
 
 INSERT INTO cashback (cd_genero, cd_dia, vl_percentual) VALUES
