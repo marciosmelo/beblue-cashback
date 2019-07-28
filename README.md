@@ -20,12 +20,12 @@ API Rest de uma loja de Discos que oferece Cashback na venda de Albuns listados 
 ### Build
 ```./gradlew build```
 
-### Executar (Maven ou Docker)
-- Gradle
+### Executar 
+- via Gradle
 
   ``````./gradlew bootRun``````
 
-- Docker
+- via Docker
 
   ```docker build -t beblue .```
   
