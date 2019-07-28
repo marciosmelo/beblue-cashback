@@ -36,11 +36,11 @@ API Rest de uma loja de Discos que oferece Cashback na venda de Albuns listados 
 ### Discos
 * Listar Discos por Gênero (MPB, ROCK, CLASSIC ou POP): listando discos do Spotify de Rock
   * Content-Type: application/json
-  * GET: [http://localhost:8080/albuns?genero=GENERO](http://localhost:8080/albuns?genero=rock)
+  * GET: [http://localhost:8080/albuns?genero=rock](http://localhost:8080/albuns?genero=rock)
   
 * Retornar Disco por identificador Spotify: retorna o disco com o identificador do Spotity  
   * Content-Type: application/json
-  * GET: [http://localhost:8080/albuns/id](http://localhost:8080/albuns/http://localhost:8080/albuns/71ZubYRSrVxjpF6OxNhb1j)
+  * GET: [http://localhost:8080/albuns/{id}](http://localhost:8080/albuns/http://localhost:8080/albuns/71ZubYRSrVxjpF6OxNhb1j)
    
 ### Vendas
 * Nova venda: Registra uma venda na API. O formato enviado deve ser um json no body da requisição conforme exemplo abaixo. Aps registrar a venda é retornando um json com um informativo geral da venda. Discos Vendidos e o valor de cashback de cada um bem como o valor total de cashback da compra.
