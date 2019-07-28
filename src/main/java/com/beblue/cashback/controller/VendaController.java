@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -26,16 +27,16 @@ public class VendaController {
     @Autowired
     Messages messages;
 
-    @RequestMapping(method = RequestMethod.GET, value="/{id}")
+    @GetMapping("/{id}")
     public Venda obterVendaPorId(@PathVariable Long id) throws ApiException {
         logger.info("Buscando Venda por identificador {} ", id);
         return service.obterPorId(id);
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public Venda registrarVenda() throws ApiException {
+    @PostMapping()
+    public Venda registrarVenda(@RequestBody @Valid List<Disco> discos) throws ApiException {
         logger.info("Registrando Vendas dos Discos ");
-        return service.registrarVenda(null);
+        return service.registrarVenda(discos);
     }
 
 }

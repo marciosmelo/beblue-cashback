@@ -3,6 +3,7 @@ package com.beblue.cashback.model;
 import com.wrapper.spotify.model_objects.specification.ExternalUrl;
 import lombok.*;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Getter
@@ -12,14 +13,11 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(of = {"id"})
 public class Disco {
 
-    String id;
-    String nome;
-    String tipoAlbum;
-    ExternalUrl linksSpotiy;
-    BigDecimal preco;
+    @NotNull
+    private String id;
+    private String nome;
+    private String tipoAlbum;
+    @NotNull
+    private BigDecimal preco;
 
-    public Disco(String idAlbum, String nome) {
-        this.id = idAlbum;
-        this.nome = nome;
-    }
 }

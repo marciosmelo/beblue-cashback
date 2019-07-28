@@ -62,7 +62,7 @@ public class AlbumService {
 
 
             return albuns.map(a ->
-                    new Disco(a.getId(), a.getName(), a.getType().getType(), a.getExternalUrls(), ValorUtil.gerarValorRandomico(a.getArtists().length)))
+                    new Disco(a.getId(), a.getName(), a.getType().getType(), ValorUtil.gerarValorRandomico(a.getArtists().length)))
                     .collect(Collectors.toList());
 
         } catch (IOException | SpotifyWebApiException e) {
@@ -145,6 +145,5 @@ public class AlbumService {
             album -> new Disco(album.getId(),
                                album.getName(),
                                album.getType().getType(),
-                               album.getExternalUrls(),
                                ValorUtil.gerarValorRandomico(album.getPopularity()));
 }

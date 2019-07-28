@@ -17,6 +17,8 @@ import java.util.List;
 public class Venda {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", nullable = false)
 	private Long id;
 
 	@Column(name = "dt_venda")
