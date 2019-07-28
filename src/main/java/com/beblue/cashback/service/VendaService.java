@@ -6,6 +6,7 @@ import com.beblue.cashback.model.Cashback;
 import com.beblue.cashback.model.Disco;
 import com.beblue.cashback.model.DiscoVenda;
 import com.beblue.cashback.model.Venda;
+import com.beblue.cashback.repository.DiscoVendaRepository;
 import com.beblue.cashback.repository.VendaRepository;
 import org.hibernate.service.spi.InjectService;
 import org.slf4j.Logger;
@@ -34,6 +35,9 @@ public class VendaService {
     private VendaRepository repository;
 
     @Autowired
+    private DiscoVendaRepository discoVendaRepository;
+
+    @Autowired
     private CashbackService cashbackService;
 
     @Autowired
@@ -49,7 +53,11 @@ public class VendaService {
             throw new ApiException(messages.get("venda.nao.encontrada"));
         }
 
-        return optVenda.get();
+        Venda venda = optVenda.get();
+
+        venda.setDiscosVendidos(discoVendaRepository.findAllByVenda(venda));
+
+        return venda;
     }
 
     public Venda registrarVenda(List<Disco> discos) throws ApiException {
