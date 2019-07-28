@@ -79,7 +79,7 @@ API Rest de uma loja de Discos que oferece Cashback na venda de Albuns listados 
   * Content-Type: application/json
   * GET: [http://localhost:8080/vendas/id](http://localhost:8080/vendas/1)
    
-## Observações:
+### Observações:
 
 * As tabelas do banco de dados são apagadas, limpas e recriadas a cada execução.
 
@@ -90,6 +90,6 @@ API Rest de uma loja de Discos que oferece Cashback na venda de Albuns listados 
   * Método para Autenticação
   * Melhoria no controle de exceções para retornar mais Status específicos
   * Implementação mais ampla de TDD
-  * Utilização de um plugin swagger para listar todos os endpoints e suas respectivas propriedades, restriçes e retornos
+  * Utilização de um plugin swagger para listar todos os endpoints e suas respectivas propriedades, restrições e retornos
 
 
