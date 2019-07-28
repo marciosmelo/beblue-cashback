@@ -8,9 +8,15 @@ import com.beblue.cashback.service.VendaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.awt.print.Pageable;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -19,13 +25,8 @@ public class VendaController {
 
     Logger logger = LoggerFactory.getLogger(VendaController.class);
 
-    private static final String NUMERO_PADRAO_PAGINA = "1";
-
     @Autowired
     private VendaService service;
-
-    @Autowired
-    Messages messages;
 
     @GetMapping("/{id}")
     public Venda obterVendaPorId(@PathVariable Long id) throws ApiException {
@@ -39,4 +40,12 @@ public class VendaController {
         return service.registrarVenda(discos);
     }
 
+    @GetMapping()
+    public List<Venda> consultarVendas() throws ApiException {
+        logger.info("Consultando todas Vendas de Discos ");
+
+            return service.obterVendas();
+    }
 }
+
+

@@ -12,6 +12,5 @@ import java.time.DayOfWeek;
 @Repository
 public interface CashbackRepository extends JpaRepository<Cashback, Long> {
 
-    @Query("SELECT cash FROM Cashback cash WHERE cash.genero = ?1 AND cash.dia = ?2")
-    Cashback obterPorGeneroDia(GeneroEnum codigoGenero, DiaEnum dia);
+    Cashback findByGeneroAndDia(GeneroEnum genero, DiaEnum dia);
 }

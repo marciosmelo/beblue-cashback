@@ -19,6 +19,6 @@ public class CashbackService {
 
     public Cashback obterCashbackDoDiaPorGenero(GeneroEnum genero) {
         DiaEnum dia = DiaEnum.values()[LocalDateTime.now().getDayOfWeek().ordinal()];
-        return repository.obterPorGeneroDia(genero, dia);
+        return repository.findByGeneroAndDia(genero, dia);
     }
 }

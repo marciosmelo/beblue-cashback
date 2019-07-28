@@ -2,6 +2,7 @@ package com.beblue.cashback.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
@@ -65,4 +66,5 @@ public class Venda {
 				.reduce(BigDecimal.ZERO,BigDecimal::add);
 
 	}
+
 }

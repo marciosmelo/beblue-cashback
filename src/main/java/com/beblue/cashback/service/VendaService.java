@@ -11,9 +11,11 @@ import org.hibernate.service.spi.InjectService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.awt.print.Pageable;
 import java.math.BigDecimal;
 import java.sql.Array;
 import java.time.LocalDate;
@@ -93,5 +95,14 @@ public class VendaService {
         return disco.getPreco().multiply(cashback.getPercentual()).divide(HUNDRED);
     }
 
+
+    public List<Venda> obterVendas() throws ApiException {
+        try {
+            return repository.findAll();
+        } catch (Exception e) {
+            logger.error("erro ao tentar obter Vendas {} ", e.getMessage());
+            throw new ApiException("erro.consultar.vendas");
+        }
+    }
 
 }
