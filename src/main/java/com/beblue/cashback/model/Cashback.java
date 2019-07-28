@@ -6,14 +6,13 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Objects;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = {"id"})
-@Entity(name = "cashback")
+@Entity(name = "Cashback")
 public class Cashback {
 
     @Id
@@ -21,11 +20,11 @@ public class Cashback {
 
     @Column(name = "cd_dia")
     @Enumerated(EnumType.ORDINAL)
-    private DiaEnum codigoDia;
+    private DiaEnum dia;
 
     @Column(name = "cd_genero")
     @Enumerated(EnumType.ORDINAL)
-    private GeneroEnum codigoGenero;
+    private GeneroEnum genero;
 
     @Column(name = "vl_percentual", nullable = false, precision = 5, scale  = 2)
     private BigDecimal percentual;

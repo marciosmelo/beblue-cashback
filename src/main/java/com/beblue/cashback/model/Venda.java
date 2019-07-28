@@ -5,9 +5,11 @@ import lombok.*;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -31,24 +33,36 @@ public class Venda {
 	private List<DiscoVenda> discosVendidos;
 
 	@Transient
-	private List<Disco> discos;
+	private BigDecimal valorTotalCashback;
 
+	@Transient
+	private List<AlbumVendido> albunsVendidos;
 
 	public Venda() {
 		this.data = LocalDate.now();
 	}
 
-	public List<Disco> getDiscos() {
+	public List<AlbumVendido> getAlbunsVendidos() {
 		if (discosVendidos.isEmpty()) {
 			return Collections.emptyList();
 		}
 
 		return discosVendidos.stream()
-				.map( d -> new Disco(d.getDisco().getId(),
-									 d.getDisco().getIdentificadorSpotiy(),
-									 d.getDisco().getNome(),
-									 d.getDisco().getGenero(),
-						             d.getDisco().getPreco()))
+				.map( d -> new AlbumVendido(d.getDisco().getNome(),
+									 		d.getDisco().getGenero(),
+						             		d.getValorUnitario(),
+											d.getValorCashback()))
 				.collect(Collectors.toList());
+	}
+
+	public BigDecimal getValorTotalCashback() {
+		if (discosVendidos.isEmpty()) {
+			return BigDecimal.ZERO;
+		}
+
+		return discosVendidos.stream()
+				.map(DiscoVenda::getValorCashback)
+				.reduce(BigDecimal.ZERO,BigDecimal::add);
+
 	}
 }

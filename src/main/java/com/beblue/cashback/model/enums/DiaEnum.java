@@ -2,6 +2,7 @@ package com.beblue.cashback.model.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.DayOfWeek;
 

@@ -36,4 +36,5 @@ public class Disco {
     @Column(name = "vl_preco")
     private BigDecimal preco;
 
+
 }

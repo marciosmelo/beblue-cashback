@@ -2,10 +2,12 @@ package com.beblue.cashback.service;
 
 import com.beblue.cashback.common.Messages;
 import com.beblue.cashback.exception.ApiException;
+import com.beblue.cashback.model.Cashback;
 import com.beblue.cashback.model.Disco;
 import com.beblue.cashback.model.DiscoVenda;
 import com.beblue.cashback.model.Venda;
 import com.beblue.cashback.repository.VendaRepository;
+import org.hibernate.service.spi.InjectService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.sql.Array;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +25,7 @@ import java.util.stream.Collectors;
 @Service
 public class VendaService {
 
+    private static final BigDecimal HUNDRED = BigDecimal.valueOf(100.00);
 	Logger logger = LoggerFactory.getLogger(VendaService.class);
 
     @Autowired
@@ -33,7 +37,10 @@ public class VendaService {
     @Autowired
     Messages messages;
 
-    public Venda obterPorId(Long id) throws ApiException {
+	public VendaService() {
+	}
+
+	public Venda obterPorId(Long id) throws ApiException {
         Optional<Venda> optVenda = repository.findById(id);
 
         if (!optVenda.isPresent()) {
@@ -80,8 +87,10 @@ public class VendaService {
     private Function<Disco, DiscoVenda> externalToDiscoVenda =
             disco -> new DiscoVenda(null, null, disco, this.obterCashback(disco), disco.getPreco());
 
-    private BigDecimal obterCashback(Disco disco) {
-        return BigDecimal.ZERO;
+    private BigDecimal obterCashback(Disco disco)  {
+        Cashback cashback = cashbackService.obterCashbackDoDiaPorGenero(disco.getGenero());
+
+        return disco.getPreco().multiply(cashback.getPercentual()).divide(HUNDRED);
     }
 
 
